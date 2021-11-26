@@ -85,6 +85,16 @@ func Test_LatestVersion(t *testing.T) {
 		assert.Equal(t, "1.0", newTag.TagName)
 	})
 
+	t.Run("Find the latest version with a semver constraint and base is a tag", func(t *testing.T) {
+		tagList := newImageTagList([]string{"0.1", "0.5.1", "0.9", "1.0", "1.0.1", "1.1.2", "2.0.3"})
+		img := NewFromIdentifier("jannfis/test:stable")
+		vc := VersionConstraint{Constraint: "1.x.x"}
+		newTag, err := img.GetNewestVersionFromTags(&vc, tagList)
+		require.NoError(t, err)
+		require.NotNil(t, newTag)
+		assert.Equal(t, "1.1.2", newTag.TagName)
+	})
+
 	t.Run("Find the latest version using latest sortmode", func(t *testing.T) {
 		tagList := newImageTagListWithDate([]string{"zz", "bb", "yy", "cc", "yy", "aa", "ll"})
 		img := NewFromIdentifier("jannfis/test:bb")

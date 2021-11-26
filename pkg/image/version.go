@@ -81,14 +81,6 @@ func (img *ContainerImage) GetNewestVersionFromTags(vc *VersionConstraint, tagLi
 	var semverConstraint *semver.Constraints
 	var err error
 	if vc.SortMode == VersionSortSemVer {
-		// TODO: Shall we really ensure a valid semver on the current tag?
-		// This prevents updating from a non-semver tag currently.
-		if img.ImageTag != nil && img.ImageTag.TagName != "" {
-			_, err := semver.NewVersion(img.ImageTag.TagName)
-			if err != nil {
-				return nil, err
-			}
-		}
 
 		if vc.Constraint != "" {
 			if vc.SortMode == VersionSortSemVer {
